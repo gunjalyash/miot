@@ -1,0 +1,116 @@
+library IEEE;
+	use IEEE.STD_LOGIC_1164.ALL;
+
+	entity USR is
+		 Port ( Din : in  STD_LOGIC_VECTOR (3 downto 0);
+				  Clk : in  STD_LOGIC;
+				  rst : in  STD_LOGIC;
+				  S : in  STD_LOGIC_VECTOR (1 downto 0);
+				  Dout : inout  STD_LOGIC_VECTOR (3 downto 0));
+	end USR;
+
+	architecture Behavioral of USR is
+	signal msbin,lsbin:std_logic;	
+        begin	
+        process (Clk,rst)
+	begin
+
+	if rst='1' then	dout<="0000";
+	elsif Clk' event and Clk='1' then	
+        msbin<=din(3);	
+        lsbin<=din(0);
+	case S is	
+        when "00"=>Dout<= Dout;	
+        when "01"=>Dout<=msbin & Dout (3 downto 1);	
+        when "10"=>Dout<=Dout (2 downto 0) & lsbin;	
+        When others=> Dout<=din;
+	end case;	
+        end if;	
+        end process;
+
+	end Behavioral;
+
+
+
+Testbench:
+
+
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+ 
+
+ 
+ENTITY USRTEST IS
+END USRTEST;
+ 
+ARCHITECTURE behavior OF USRTEST IS 
+ 
+    -- Component Declaration for the Unit Under Test (UUT)
+ 
+    COMPONENT USR
+    PORT(
+         Din : IN  std_logic_vector(3 downto 0);
+         Clk : IN  std_logic;
+         rst : IN  std_logic;
+         S : IN  std_logic_vector(1 downto 0);
+         Dout : INOUT  std_logic_vector(3 downto 0)
+        );
+    END COMPONENT;
+    
+
+   --Inputs
+   signal Din : std_logic_vector(3 downto 0) := (others => '0');
+   signal Clk : std_logic := '0';
+   signal rst : std_logic := '0';
+   signal S : std_logic_vector(1 downto 0) := (others => '0');
+
+	--BiDirs
+   signal Dout : std_logic_vector(3 downto 0);
+
+   -- Clock period definitions
+   constant Clk_period : time := 10 ns;
+ 
+BEGIN
+ 
+	-- Instantiate the Unit Under Test (UUT)
+   uut: USR PORT MAP (
+          Din => Din,
+          Clk => Clk,
+          rst => rst,
+          S => S,
+          Dout => Dout
+        );
+
+   -- Clock process definitions
+   Clk_process :process
+   begin
+		Clk <= '0';
+		wait for Clk_period/2;
+		Clk <= '1';
+		wait for Clk_period/2;
+   end process;
+ 
+
+   -- Stimulus process
+   stim_proc: process
+   begin		
+     
+      wait for 100 ns;	
+		rst<='1';
+		assert dout<="0000"report"error in logic";
+      wait for clk_period*10;
+		rst<='0';
+		din<="1000"; 
+		s<="01";
+		assert dout <= "1000" report "error in logic";
+		wait for clk_period/2;
+		assert dout <= "1100" report "error in logic";
+      wait for clk_period/2;
+		assert dout <= "1110" report "error in logic";
+      wait for clk_period/2;
+		assert dout <= "1111" report "error in logic";
+      wait for clk_period/2;
+      wait;
+   end process;
+
+END;
