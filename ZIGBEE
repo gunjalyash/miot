@@ -1,0 +1,32 @@
+For Transmitter
+#include <dht.h>
+#include <SoftwareSerial.h>
+dht DHT;
+#define DHT11_PIN 2
+// Set up a new SoftwareSerial object
+SoftwareSerial mySerial (6,7);
+void setup() {
+Serial.begin(9600);
+// Set the baud rate for the SoftwareSerial object
+mySerial.begin(9600);
+Serial.println("DHT interfacing");
+mySerial.println("DHT interfacing");
+Serial.println("Type,\tHumidity (%),\tTemperature (C)");
+mySerial.println("Type,\tHumidity (%),\tTemperature (C)");
+}
+
+
+For Receiver
+void loop() {
+// READ DATA
+mySerial.print("DHT11, \t");
+int chk = DHT.read11(DHT11_PIN);
+// DISPLAY DATA
+mySerial.print(DHT.humidity, 1);
+mySerial.print(",\t");
+mySerial.println(DHT.temperature, 1);
+Serial.print("DHT11, \t");
+Serial.print(DHT.humidity, 1);
+Serial.print(",\t");
+Serial.println(DHT.temperature, 1);
+}
