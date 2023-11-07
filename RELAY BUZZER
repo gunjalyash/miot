@@ -1,0 +1,49 @@
+# define relay 3 
+# define pushbt 6 
+void setup() 
+{ 
+pinMode( pushbt, INPUT); 
+pinMode(relay, OUTPUT); 
+} 
+void loop() 
+{ 
+buttonState = digitalRead(pushbt); 
+if (buttonState == HIGH) 
+{ 
+digitalWrite(relay, HIGH); 
+Serial.println(“relay on”); 
+Serial.println(“ ”); 
+} 
+else 
+{ 
+digitalWrite(relay, LOW); 
+Serial.println(“relay off”); 
+Serial.println(“ ”); 
+} 
+delay(10); 
+} 
+Buzzer: 
+# define buzzer 3 
+# define pushbt 6 
+void setup() 
+{ 
+pinMode( pushbt, INPUT); 
+pinMode(buzzer, OUTPUT); 
+} 
+void loop() 
+{ 
+buttonState = digitalRead(pushbt); 
+if (buttonState == HIGH) 
+{ 
+digitalWrite(buzzer, HIGH); 
+Serial.println(“Buzzer on”); 
+Serial.println(“ ”); 
+} 
+else 
+{
+digitalWrite(buzzer, LOW); 
+Serial.println(“Buzzer off”); 
+Serial.println(“ ”); 
+} 
+delay(10); 
+}
