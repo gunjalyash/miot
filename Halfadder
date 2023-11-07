@@ -1,0 +1,160 @@
+HalfAdder:
+
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity HA21 is
+ Port ( A,B : in  STD_LOGIC; 
+        sum : out  STD_LOGIC;
+        carry : out  STD_LOGIC);
+end HA21;
+
+architecture Behavioral of HA21 is
+
+component xor1
+port (x,y:in std_logic;
+        z:out std_logic);
+ end component;
+
+component and1 
+port( P,Q :in std_logic;
+	          R: out std_logic);
+ end component;
+begin 
+      halfadder1: xor1 port map(A,B,sum);
+      halfadder2: and1 port map(A,B, carry);
+
+end Behavioral;
+
+
+xor1:
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+
+entity xor1 is
+    Port ( x : in  STD_LOGIC;
+           y : in  STD_LOGIC;
+           z : out  STD_LOGIC);
+end xor1;
+
+architecture Behavioral of xor1 is
+
+begin
+z <= x xor y ;
+
+end Behavioral;
+
+
+
+And1:
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity and1 is
+    Port ( P : in  STD_LOGIC;
+           Q : in  STD_LOGIC;
+           R : out  STD_LOGIC);
+end and1;
+
+architecture Behavioral of and1 is
+
+begin
+R <= p AND Q ;
+
+end Behavioral;
+
+
+
+
+Testbench:  
+
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+ 
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--USE ieee.numeric_std.ALL;
+ 
+ENTITY HA_TB IS
+END HA_TB;
+ 
+ARCHITECTURE behavior OF HA_TB IS 
+ 
+    -- Component Declaration for the Unit Under Test (UUT)
+ 
+    COMPONENT HA21
+    PORT(
+         A : IN  std_logic;
+         B : IN  std_logic;
+         sum : OUT  std_logic;
+         carry : OUT  std_logic
+        );
+    END COMPONENT;
+    
+
+   --Inputs
+   signal A : std_logic := '0';
+   signal B : std_logic := '0';
+
+ 	--Outputs
+   signal sum : std_logic;
+   signal carry : std_logic;
+   -- No clocks detected in port list. Replace <clock> below with 
+   -- appropriate port name 
+ 
+  -- constant <clock>_period : time := 10 ns;
+ 
+BEGIN
+ 
+	-- Instantiate the Unit Under Test (UUT)
+   uut: HA21 PORT MAP (
+          A => A,
+          B => B,
+          sum => sum,
+          carry => carry
+        );
+
+   -- Clock process definitions
+  -- <clock>_process :process
+   --begin
+		--<clock> <= '0';
+		--wait for <clock>_period/2;
+		--<clock> <= '1';
+		--wait for <clock>_period/2;
+   --end process;
+ 
+
+   -- Stimulus process
+   stim_proc: process
+   begin
+     A<='1';
+	  B<='0';
+	  Assert sum<='1' report "ERROR IN LOGIC";
+		-- hold reset state for 100 ns.
+      wait for 100 ns;	
+		 A<='0';
+	  B<='1';
+	  Assert sum<='0' report "ERROR IN LOGIC";
+		-- hold reset state for 100 ns.
+      wait for 100 ns;
+		 A<='1';
+	  B<='0';
+	  Assert sum<='0' report "ERROR IN LOGIC";
+		-- hold reset state for 100 ns.
+      wait for 100 ns;
+	
+      -- hold reset state for 100 ns.
+      wait for 100 ns;	
+
+     -- wait for <clock>_period*10;
+
+      -- insert stimulus here 
+
+      wait;
+   end process;
+
+END;
