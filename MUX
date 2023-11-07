@@ -1,0 +1,123 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+
+entity MUX21 is
+   Port ( A  : in  STD_LOGIC_vector(7 downto 0);
+           S : in  STD_LOGIC_vector(2 downto 0);
+           Y : out  STD_LOGIC);
+end MUX21;
+architecture Behavioral of MUX21 is
+begin
+process(A,S)
+	begin
+	if s="000" then
+	Y<=A(0);
+	elsif s="001" then
+	Y<=A(1);
+	elsif s="010" then
+	Y<=A(2);
+	elsif s="011" then
+	Y<=A(3);
+	elsif s="100" then
+	Y<=A(4);
+	elsif s="101" then
+	Y<=A(5);
+	elsif s="110" then
+	Y<=A(6);
+	else Y<=A(7);
+	end if;
+	end process;
+end Behavioral;
+
+
+
+Testbench:
+
+
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+ 
+
+ENTITY MUX_TB IS
+END MUX_TB;
+ 
+ARCHITECTURE behavior OF MUX_TB IS 
+ 
+    -- Component Declaration for the Unit Under Test (UUT)
+ 
+    COMPONENT MUX21
+    PORT(
+         A : IN  std_logic_vector(7 downto 0);
+         S : IN  std_logic_vector(2 downto 0);
+         Y : OUT  std_logic
+        );
+    END COMPONENT;
+    
+
+   --Inputs
+   signal A : std_logic_vector(7 downto 0) := (others => '0');
+   signal S : std_logic_vector(2 downto 0) := (others => '0');
+
+ 	--Outputs
+   signal Y : std_logic;
+   -- No clocks detected in port list. Replace <clock> below with 
+   -- appropriate port name 
+
+ 
+BEGIN
+ 
+	-- Instantiate the Unit Under Test (UUT)
+   uut: MUX21 PORT MAP (
+          A => A,
+          S => S,
+          Y => Y
+        );
+
+   -- Clock process definitions
+   
+
+   -- Stimulus process
+   stim_proc: process
+   begin		
+      -- hold reset state for 100 ns.
+		A<="01010101";
+		S<="000"	;
+		assert Y<=A(0)  report"error";
+      wait for 100 ns;
+		
+		S<="001"	;
+		assert Y<=A(1)  report"error";
+      wait for 100 ns;
+		
+		S<="010";
+		assert Y<=A(2)  report"error";
+      wait for 100 ns;
+		
+		S<="011"	;
+		assert Y<=A(3)  report"error";
+      wait for 100 ns;
+		
+		S<="100"	;
+		assert Y<=A(4)  report"error";
+      wait for 100 ns;
+		
+		S<="101";
+		assert Y<=A(5)  report"error";
+      wait for 100 ns;
+		
+		S<="110"	;
+		assert Y<=A(6)  report"error";
+      wait for 100 ns;
+		
+		S<="111"	;
+		assert Y<=A(7)  report"error";
+      wait for 100 ns;	
+
+
+      -- insert stimulus here 
+
+      wait;
+   end process;
+
+END;
