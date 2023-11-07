@@ -1,0 +1,174 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity FIFO12 is
+generic(constant data_width:positive:=8;
+constant fifo_depth:positive:=8);
+Port ( clk : in STD_LOGIC;
+rst : in STD_LOGIC;
+WriteEn : in STD_LOGIC;
+Dataln : in STD_LOGIC_VECTOR(data_width-1 downto 0);
+ReadEn : in STD_LOGIC;
+Dataout : out STD_LOGIC_VECTOR(data_width-1 downto 0);
+Empty : out STD_LOGIC;
+Full : out STD_LOGIC);
+end FIFO12;
+
+architecture Behavioral of FIFO12 is
+
+begin
+fifo_proc:Process(clk)
+type fifo_memory is array (0 to fifo_depth-1) of std_logic_vector(data_width-1 downto 0);
+variable memory :fifo_memory;
+variable head : natural range 0 to fifo_depth-1;
+variable tail : natural range 0 to fifo_depth-1;
+variable looped: boolean;
+
+begin
+
+if rising_edge(clk) then
+if rst='1' then
+head :=0;
+tail:=0;
+looped :=false;
+Full<='0';
+Empty<='1';
+else
+if(ReadEn='1')then
+if((looped=true) or (head/=tail))then
+Dataout<=memory(tail);
+if(tail=fifo_depth-1)then
+tail:=0;
+looped:=false;
+else
+tail:=tail+1;
+end if;
+end if;
+end if;
+
+if(WriteEn='1')then
+if((looped=false)or (head/=tail))then
+memory(head):=Dataln;
+if(head=fifo_depth-1)then
+head:=0;
+looped:=true;
+else
+head:=head+1;
+end if;
+end if;
+end if;
+
+if(head=tail)then
+if looped then
+Full<='1';
+else
+Empty<='1';
+end if;
+else
+Empty<='0';
+Full<='0';
+end if;
+end if;
+end if;
+
+end Process;
+
+
+end Behavioral;
+
+
+
+
+Testbench:
+
+
+
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+ 
+ENTITY FIFO_TB IS
+END FIFO_TB;
+ 
+ARCHITECTURE behavior OF FIFO_TB IS 
+ 
+    -- Component Declaration for the Unit Under Test (UUT)
+ 
+    COMPONENT FIFO12
+    PORT(
+         clk : IN  std_logic;
+         rst : IN  std_logic;
+         WriteEn : IN  std_logic;
+         Dataln : IN  std_logic_vector(7 downto 0);
+         ReadEn : IN  std_logic;
+         Dataout : OUT  std_logic_vector(7 downto 0);
+         Empty : OUT  std_logic;
+         Full : OUT  std_logic
+        );
+    END COMPONENT;
+    
+   --Inputs
+   signal clk : std_logic := '0';
+   signal rst : std_logic := '0';
+   signal WriteEn : std_logic := '0';
+   signal Dataln : std_logic_vector(7 downto 0) := (others => '0');
+   signal ReadEn : std_logic := '0';
+
+ 	--Outputs
+   signal Dataout : std_logic_vector(7 downto 0);
+   signal Empty : std_logic;
+   signal Full : std_logic;
+
+   -- Clock period definitions
+   constant clk_period : time := 10 ns;
+ 
+BEGIN
+ 
+	-- Instantiate the Unit Under Test (UUT)
+   uut: FIFO12 PORT MAP (
+          clk => clk,
+          rst => rst,
+          WriteEn => WriteEn,
+          Dataln => Dataln,
+          ReadEn => ReadEn,
+          Dataout => Dataout,
+          Empty => Empty,
+          Full => Full
+        );
+
+   -- Clock process definitions
+   clk_process :process
+   begin
+		clk <= '0';
+		wait for clk_period/2;
+		clk <= '1';
+		wait for clk_period/2;
+   end process;
+ 
+   -- Stimulus process
+   stim_proc: process
+   begin		
+	 wait for 100 ns;
+	rst<='1';
+	assert DataOut="00000000" report "error";	
+      wait for clk_period*10;
+	rst<='0';
+	wait for clk_period;
+	writeEN<='1';
+	Dataln<="10011011";
+	ReadEn<='1';
+	wait for clk_period;
+	assert DataOut= "10011011" report "err";
+	wait for clk_period;
+	wait for clk_period;
+	writeEN<='1';
+	Dataln<="11111011";
+	ReadEn<='1';
+	wait for clk_period;
+	assert DataOut= "11111011" report "err";
+	wait for clk_period;
+	wait for clk_period;
+
+      wait;
+   end process;
+
+END;
