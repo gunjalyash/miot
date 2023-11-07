@@ -1,0 +1,40 @@
+Ultrasonic Sensor: 
+ #define echopin 9 
+#define trigpin 8 
+void setup() { 
+ pinMode(trigpin,OUTPUT); 
+ pinMode(echopin,INPUT); 
+ Serial.begin(9600); 
+} 
+void loop() { 
+ long duration; 
+ int distance; 
+ digitalWrite(trigpin,LOW); 
+ delayMicroseconds(100); 
+ digitalWrite(trigpin,HIGH); 
+ delayMicroseconds(100); 
+ digitalWrite(trigpin,LOW); 
+ duration=pulseIn(echopin,HIGH); 
+ distance = (duration*0.03412); 
+ Serial.print("distance"); 
+ Serial.print(distance); 
+ Serial.println("cm"); 
+}
+
+
+DHT11 Sensor: 
+#include <dht.h> 
+#define DHT11_PIN 2 
+dht DHT; 
+void setup() { 
+ Serial.begin(9600); 
+} 
+void loop() { 
+ Serial.println(); 
+ int chk = DHT.read(DHT11_PIN); 
+ Serial.print("humidity(%)"); 
+ Serial.println (DHT.humidity, 1); 
+ Serial.print("temperature( c)"); 
+ Serial.println (DHT.temperature, 1); 
+ delay(2000); 
+}
