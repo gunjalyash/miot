@@ -1,0 +1,97 @@
+Source Code: 
+Raspberry code For LED:
+
+import time
+from gpiozero import LED
+
+led1 = LED (8)
+led2 = LED (10)
+led3 = LED (9)
+led4 = LED (11)
+while True:
+	try:
+		led1.off ()
+		time.sleep (0.5)
+		led1.on ()
+		led2.off ()
+		time.sleep (0.5)
+		led2.on ()
+		led3.off ()
+		time.sleep (0.5)
+		led3.on ()
+		led4.off()
+		time.sleep (0.5)
+		led4.on ()
+		time.sleep (0.5)
+		
+	except KeyboardInterrupt: 
+		print ("closing")	
+		exit ()
+
+
+
+Raspberry code For Relay:
+
+import time
+import RPi.GPIO as GPIO 
+TRUE = 1
+relay1 = 12
+relay2 = 4
+
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(relay1,GPIO.OUT) 
+GPIO.setup(relay2,GPIO.OUT)
+def relayState(relay,val):
+	if relay==1:
+		GPIO.output(relay1,val)
+	if relay==2:
+		GPIO.output(relay2,val)			
+try:
+	while TRUE:
+		relayState(1,1)
+		time.sleep(1)
+		relayState(1,0)
+		time.sleep(1)
+		relayState(2,1)
+		time.sleep(1)
+		relayState(2,0)
+		time.sleep(1)	
+# If CTRL+C is pressed the main loop is broken
+except KeyboardInterrupt:
+    RUNNING = False
+    print ("\Quitting") 
+# Actions under 'finally' will always be called
+finally:
+    # Stop and finish cleanly so the pins
+    # are available to be used again
+    GPIO.cleanup()
+
+
+Raspberry code For Buzzer:
+
+import time
+import RPi.GPIO as GPIO 
+TRUE = 1
+buzzer = 4
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(buzzer,GPIO.OUT) 
+
+def buzzerState(val):
+	GPIO.output(buzzer,val)	    
+try:
+    while TRUE:
+	buzzerState(1)
+	time.sleep(1)
+	buzzerState(0)
+	time.sleep(1)
+		
+# If CTRL+C is pressed the main loop is broken
+except KeyboardInterrupt:
+    RUNNING = False
+    print "\Quitting"
+ 
+# Actions under 'finally' will always be called
+finally:
+    # Stop and finish cleanly so the pins
+    # are available to be used again
+    GPIO.cleanup()
