@@ -1,0 +1,322 @@
+ALU:
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_ARITH.ALL;
+use IEEE.STD_LOGIC_unsigned.all;
+
+entity ALU21 is
+    Port ( A,B : in  STD_LOGIC_VECTOR(3 DOWNTO 0);
+           S : in  STD_LOGIC_VECTOR(3 DOWNTO 0);
+	   M : IN STD_LOGIC;
+           Y : out  STD_LOGIC_VECTOR(3 DOWNTO 0));
+end ALU21;
+
+architecture Behavioral of ALU21 is
+begin
+process(A,B,M,S)
+	begin
+	if M='0' then
+	case S is
+	when "0000"=>Y<=A+B;
+	when "0011"=>Y<=A-B;
+	when "0100"=>Y<=A+1;
+	when "1000"=>Y<=B+1;
+	when others=>null;
+	end case;
+	else
+	case S is
+	when "0000"=>Y<=A and B;
+	when "0011"=>Y<=A or B;
+	when "0100"=>Y<=A nand B;
+	when "1000"=>Y<= A xor A;
+	when others=>null;
+	end case;
+	end if;
+	end process;
+
+
+end Behavioral;
+
+
+
+Testbench:
+
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+ 
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--USE ieee.numeric_std.ALL;
+ 
+ENTITY ALU_TB IS
+END ALU_TB;
+ 
+ARCHITECTURE behavior OF ALU_TB IS 
+ 
+    -- Component Declaration for the Unit Under Test (UUT)
+ 
+    COMPONENT ALU21
+    PORT(
+         A : IN  std_logic_vector(3 downto 0);
+         B : IN  std_logic_vector(3 downto 0);
+         S : IN  std_logic_vector(3 downto 0);
+         M : IN  std_logic;
+         Y : OUT  std_logic_vector(3 downto 0)
+        );
+    END COMPONENT;
+    
+
+   --Inputs
+   signal A : std_logic_vector(3 downto 0) := (others => '0');
+   signal B : std_logic_vector(3 downto 0) := (others => '0');
+   signal S : std_logic_vector(3 downto 0) := (others => '0');
+   signal M : std_logic := '0';
+
+ 	--Outputs
+   signal Y : std_logic_vector(3 downto 0);
+   -- No clocks detected in port list. Replace <clock> below with 
+   -- appropriate port name 
+ 
+   --constant <clock>_period : time := 10 ns;
+ 
+BEGIN
+ 
+	-- Instantiate the Unit Under Test (UUT)
+   uut: ALU21 PORT MAP (
+          A => A,
+          B => B,
+          S => S,
+          M => M,
+          Y => Y
+        );
+
+   -- Clock process definitions
+  -- <clock>_process :process
+  -- begin
+	--	<clock> <= '0';
+		--wait for <clock>_period/2;
+		--<clock> <= '1';
+		--wait for <clock>_period/2;
+   --end process;/*
+ 
+
+   -- Stimulus process
+   stim_proc: process
+   begin
+	A<="0100";
+	B<="0010";
+   S<="0000";
+	Assert Y<="0110" report"error";
+       wait for 100 ns;	
+		 
+	A<="0100";
+	B<="0010";
+   S<="0001";
+	Assert Y<="0110" report"error";
+       wait for 100 ns;	
+   A<="0100";
+	B<="0010";
+   S<="0010";
+	Assert Y<="0101" report"error";
+	 wait for 100 ns;	
+   A<="0100";
+	B<="0010";
+   S<="0011";
+	 Assert Y<="0000" report"error";
+	 wait for 100 ns;	
+   A<="0100";
+	B<="0010";
+   S<="0100";
+	Assert Y<="0000" report"error";
+	wait for 100 ns;	
+   A<="0100";
+	B<="0010";
+   S<="0101";
+	Assert Y<="0000" report"error";
+	wait for 100 ns;	
+   A<="0100";
+	B<="0010";
+   S<="0110";
+	Assert Y<="0000" report"error";
+	wait for 100 ns;	
+   A<="0100";
+	B<="0010";
+   S<="0111";
+	Assert Y<="0000" report"error";
+   	
+
+	
+
+     -- wait for <clock>_period*10;
+
+      -- insert stimulus here 
+
+      wait;
+   end process;
+
+
+END;
+
+
+
+ALU:
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_ARITH.ALL;
+use IEEE.STD_LOGIC_unsigned.all;
+
+entity ALU21 is
+    Port ( A,B : in  STD_LOGIC_VECTOR(3 DOWNTO 0);
+           S : in  STD_LOGIC_VECTOR(3 DOWNTO 0);
+	   M : IN STD_LOGIC;
+           Y : out  STD_LOGIC_VECTOR(3 DOWNTO 0));
+end ALU21;
+
+architecture Behavioral of ALU21 is
+begin
+process(A,B,M,S)
+	begin
+	if M='0' then
+	case S is
+	when "0000"=>Y<=A+B;
+	when "0011"=>Y<=A-B;
+	when "0100"=>Y<=A+1;
+	when "1000"=>Y<=B+1;
+	when others=>null;
+	end case;
+	else
+	case S is
+	when "0000"=>Y<=A and B;
+	when "0011"=>Y<=A or B;
+	when "0100"=>Y<=A nand B;
+	when "1000"=>Y<= A xor A;
+	when others=>null;
+	end case;
+	end if;
+	end process;
+
+
+end Behavioral;
+
+
+
+Testbench:
+
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+ 
+-- Uncomment the following library declaration if using
+-- arithmetic functions with Signed or Unsigned values
+--USE ieee.numeric_std.ALL;
+ 
+ENTITY ALU_TB IS
+END ALU_TB;
+ 
+ARCHITECTURE behavior OF ALU_TB IS 
+ 
+    -- Component Declaration for the Unit Under Test (UUT)
+ 
+    COMPONENT ALU21
+    PORT(
+         A : IN  std_logic_vector(3 downto 0);
+         B : IN  std_logic_vector(3 downto 0);
+         S : IN  std_logic_vector(3 downto 0);
+         M : IN  std_logic;
+         Y : OUT  std_logic_vector(3 downto 0)
+        );
+    END COMPONENT;
+    
+
+   --Inputs
+   signal A : std_logic_vector(3 downto 0) := (others => '0');
+   signal B : std_logic_vector(3 downto 0) := (others => '0');
+   signal S : std_logic_vector(3 downto 0) := (others => '0');
+   signal M : std_logic := '0';
+
+ 	--Outputs
+   signal Y : std_logic_vector(3 downto 0);
+   -- No clocks detected in port list. Replace <clock> below with 
+   -- appropriate port name 
+ 
+   --constant <clock>_period : time := 10 ns;
+ 
+BEGIN
+ 
+	-- Instantiate the Unit Under Test (UUT)
+   uut: ALU21 PORT MAP (
+          A => A,
+          B => B,
+          S => S,
+          M => M,
+          Y => Y
+        );
+
+   -- Clock process definitions
+  -- <clock>_process :process
+  -- begin
+	--	<clock> <= '0';
+		--wait for <clock>_period/2;
+		--<clock> <= '1';
+		--wait for <clock>_period/2;
+   --end process;/*
+ 
+
+   -- Stimulus process
+   stim_proc: process
+   begin
+	A<="0100";
+	B<="0010";
+   S<="0000";
+	Assert Y<="0110" report"error";
+       wait for 100 ns;	
+		 
+	A<="0100";
+	B<="0010";
+   S<="0001";
+	Assert Y<="0110" report"error";
+       wait for 100 ns;	
+   A<="0100";
+	B<="0010";
+   S<="0010";
+	Assert Y<="0101" report"error";
+	 wait for 100 ns;	
+   A<="0100";
+	B<="0010";
+   S<="0011";
+	 Assert Y<="0000" report"error";
+	 wait for 100 ns;	
+   A<="0100";
+	B<="0010";
+   S<="0100";
+	Assert Y<="0000" report"error";
+	wait for 100 ns;	
+   A<="0100";
+	B<="0010";
+   S<="0101";
+	Assert Y<="0000" report"error";
+	wait for 100 ns;	
+   A<="0100";
+	B<="0010";
+   S<="0110";
+	Assert Y<="0000" report"error";
+	wait for 100 ns;	
+   A<="0100";
+	B<="0010";
+   S<="0111";
+	Assert Y<="0000" report"error";
+   	
+
+	
+
+     -- wait for <clock>_period*10;
+
+      -- insert stimulus here 
+
+      wait;
+   end process;
+
+
+END;
+
