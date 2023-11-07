@@ -1,0 +1,71 @@
+#include<SoftwareSerial.h> 
+#define LED1 10 
+#define LED2 11 
+#define LED3 12 
+#define LED4 13 
+SoftwareSerial bt(8,9); 
+void setup() { 
+bt.begin(9600); 
+Serial.begin(9600); 
+Serial.println("Bluetooth Interfacing"); 
+pinMode(LED1, OUTPUT); 
+pinMode(LED2, OUTPUT); 
+pinMode(LED3, OUTPUT); 
+pinMode(LED4, OUTPUT); 
+} 
+void loop() { 
+char input; 
+if (bt.available()) /* If data is available on serial port */
+{ 
+input = bt.read(); 
+Serial.println(input); /* Print character received on to the serial monitor */ 
+if(input == 'a') 
+{ 
+Serial.println("Device off"); 
+bt.print("Device off"); 
+digitalWrite(LED1, HIGH); 
+} 
+if(input == 'b') 
+{ 
+Serial.println("Device off"); 
+bt.print("Device off"); 
+digitalWrite(LED2, HIGH); 
+} 
+if(input == 'c') 
+{ 
+Serial.println("Device off"); 
+bt.print("Device off"); 
+digitalWrite(LED3, HIGH); 
+} 
+if(input == 'd') 
+{ 
+Serial.println("Device off"); 
+bt.print("Device off"); 
+digitalWrite(LED4, HIGH); 
+}
+if(input == 'A') 
+{ 
+Serial.println("Device On"); 
+bt.print("Device on"); 
+digitalWrite(LED1, LOW); 
+} 
+if(input == 'B') 
+{ 
+Serial.println("Device On"); 
+bt.print("Device on"); 
+digitalWrite(LED2, LOW); 
+} 
+if(input == 'C') 
+{ 
+Serial.println("Device On"); 
+bt.print("Device on"); 
+digitalWrite(LED3, LOW); 
+} 
+if(input == 'D') 
+{ 
+Serial.println("Device On"); 
+bt.print("Device on"); 
+digitalWrite(LED4, LOW); 
+} 
+} 
+}
